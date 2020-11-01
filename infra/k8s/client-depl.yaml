@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: amdockertrain/client:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-clusterip-srv #service name
+spec:
+  selector:
+    app: client #identify pods with label client for exposing
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000 #port inside node --> targetPort
+      targetPort: 3000 #port to be exposed in pod

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comments-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comments
+  template:
+    metadata:
+      labels:
+        app: comments
+    spec:
+      containers:
+        - name: comments
+          image: amdockertrain/comments:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-clusterip-srv #service name
+spec:
+  selector:
+    app: comments #identify pods with label comments for exposing
+  ports:
+    - name: comments
+      protocol: TCP
+      port: 4001 #port inside node --> targetPort
+      targetPort: 4001 #port to be exposed in pod
